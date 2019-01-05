@@ -100,13 +100,22 @@ end
 
 function parse()
     if string.match( vlc.path, "raiplay%.it/dirette" ) then
+        --os.execute("cmd /K \"\"\"D:\\Dati\\GoogleDrive\\php\\epgphp\\XXMKLINK.EXE\"\" \"\"D:\\Dati\\NoInstall\\Telegram\\Telegram.lnk\"\" \"\"D:\\Dati\\NoInstall\\Telegram\\Telegram.exe\"\"\"")
         local pth = nil
+        local j = 0
         local chhan = nil
         while true do
             local line = vlc.readline()
             if line==nil then 
-                break
+                j = j+1
+                if j==1000 then
+                    break
+                end
             else
+                if j~=0 then
+                    Log("1- Bachetto: j = "..tostring(j))
+                    j = 0
+                end
                 pth = string.match(line,'data%-video%-url="([^"]+)"')
                 if pth then
                     chan = string.match(line,'data%-canale="([^"]+)"')
@@ -119,11 +128,19 @@ function parse()
         end
     elseif string.match( vlc.path, "rai%.it/relinker" ) then
         local all = ''
+        local j = 0
         while true do
             local line = vlc.readline()
             if line==nil then 
-                break
+                j = j+1
+                if j==1000 then
+                    break
+                end
             else
+                if j~=0 then
+                    Log("2- Bachetto: j = "..tostring(j))
+                    j = 0
+                end
                 all = all .. "\n" .. line
             end
         end
